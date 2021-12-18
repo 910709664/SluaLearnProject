@@ -1,0 +1,17 @@
+local gridShowList={}
+    function gridShowList:SlotExist(id)
+        if(not self:_TryGetID(id)) then
+            table.insert(gridShowList,id)
+            return false
+        end
+        return true
+    end
+    function gridShowList:_TryGetID(id)
+        for k,v in pairs(self) do
+            if(v==id) then
+                return true
+            end
+        end
+        return false
+    end
+return gridShowList

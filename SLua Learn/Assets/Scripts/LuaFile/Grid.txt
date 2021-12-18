@@ -1,0 +1,53 @@
+local loadAB= require "LoadABFromFile"
+
+local mCube={}  --存储棋子的二维数组
+--lua函数需前向声明定义
+function GetAllFish()
+    local fish={}
+    for i=1,5 do
+        fish[i]=loadAB:Load("AssetBundles/fish/fish_"..tostring(i),"fish_"..tostring(i))
+    end
+    return fish
+end
+
+local grid={}
+    local row=9
+    local col=9
+    local GridGO=UnityEngine.GameObject.Find("Grid");
+    local Fish= GetAllFish()    --棋子的预制体
+
+    function grid:InitGrid()
+        local piece=loadAB:Load("AssetBundles/piece.ab","Piece")
+        for x=1,row do
+            for y=1,col do
+                --初始化网格
+                local pieceGO=GameObject.Instantiate(piece,GetWorldPos(x,y),UnityEngine.Quaternion.identity); --生成在画面中央
+                pieceGO.name="piece"
+                pieceGO.transform:SetParent(GridGO.transform)
+
+                --初始化棋子
+                local ID=math.random(1,5)
+                local fish = UnityEngine.GameObject.Instantiate(Fish[ID],GetWorldPos(x,y),UnityEngine.Quaternion.identity)
+                fish.transform:SetParent(pieceGO.transform)
+
+                --初始化二维数组
+                if(mCube[x]==nil) then
+                    mCube[x]={}
+                end
+                mCube[x][y]=fish
+            end
+        end
+    end
+
+    function grid:GetCubes()
+        return mCube;
+    end
+    function grid:GetFish()
+        return Fish;
+    end
+    function GetWorldPos(x,y)
+        return Vector3(GridGO.transform.position.x - row/2 +x-1,GridGO.transform.position.y+ col/2 -y+1,0)
+    end
+
+return grid
+

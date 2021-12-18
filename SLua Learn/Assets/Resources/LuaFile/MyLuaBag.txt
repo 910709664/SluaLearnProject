@@ -1,0 +1,64 @@
+import "UnityEngine"
+
+local equipmentInfo = require "LuaFile.EquipmentInfo"
+local grid=require "LuaFile.Grid"
+local gridShowList=require "LuaFile.GridShowList"
+local slotList=require "LuaFile.SlotList"
+local loadAB=require "LuaFile.LoadABFromFile"
+
+local canvasTrans =nil;
+local BagGO = nil;
+local SpriteArr=nil;
+local Grid=nil;
+
+function OnCloseButton()
+    BagGO:SetActive(false)
+end
+--通过装备ID来分辨装备,使用slotList存储装备信息,使用gridShowList来判断是否该装备是否存在
+function GetOneEquip()
+    local equipID=math.random(2,6)
+    --创建新装备
+    if(not gridShowList:SlotExist(equipID)) then
+       slotList:Add( grid:CreateItem(Grid,equipID,SpriteArr))
+    else
+        grid:RefreshItem(equipID)   --刷新旧装备数量
+    end
+end
+
+--主函数入口
+function main()
+    local tab={}
+    function tab:Start()
+        canvasTrans = GameObject.Find("Canvas").transform;
+        --加载AB包
+        BagGO=GameObject.Instantiate(loadAB:Load("AssetBundles/bag.ab","Bag"),canvasTrans)
+        BagGO.name="Bag"
+        SpriteArr=Resources.LoadAll("Sprite/FreePixelGear/Gear");--获得mulitpleSprite下的所有Sprite
+        print(SpriteArr[2].name)
+        local BagTrans=BagGO.transform;
+        Grid=BagTrans:Find("Grid").transform;
+
+        local BagCloseBtn=BagTrans:Find("CloseButton"):GetComponent(UI.Button);
+        local GetEquipBtn=BagTrans:Find("GetEquipBut"):GetComponent(UI.Button);
+
+        BagCloseBtn.onClick:AddListener(OnCloseButton) --关闭按钮事件
+        GetEquipBtn.onClick:AddListener(GetOneEquip) --获得装备按钮事件
+    end
+    function tab:Update()
+        -- 按键控制背包显示与关闭
+        if(UnityEngine.Input.GetKeyDown(KeyCode.I)) then
+            if(BagGO.activeSelf) then
+                BagGO:SetActive(false)
+            else
+                BagGO:SetActive(true)
+            end
+        end
+    end
+    function tab:OnEnable()
+
+    end
+    function tab:OnDisable()
+
+    end
+    return tab;
+end

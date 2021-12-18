@@ -1,0 +1,12 @@
+local slotlist={}
+    function slotlist:Add(slot)
+        table.insert(slotlist,slot)
+    end
+    function slotlist:GetSlot(id)
+        for k,v in pairs(slotlist) do
+            if(v.id==id) then
+                return v
+            end
+        end
+    end
+return slotlist

@@ -1,0 +1,32 @@
+ManifestFileVersion: 0
+CRC: 2463670967
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: bag.ab
+      Dependencies: {}
+    Info_1:
+      Name: item.ab
+      Dependencies:
+        Dependency_0: gear.ab
+    Info_2:
+      Name: gear.ab
+      Dependencies: {}
+    Info_3:
+      Name: piece.ab
+      Dependencies: {}
+    Info_4:
+      Name: fish/fish_1
+      Dependencies: {}
+    Info_5:
+      Name: fish/fish_2
+      Dependencies: {}
+    Info_6:
+      Name: fish/fish_3
+      Dependencies: {}
+    Info_7:
+      Name: fish/fish_4
+      Dependencies: {}
+    Info_8:
+      Name: fish/fish_5
+      Dependencies: {}

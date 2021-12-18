@@ -1,0 +1,36 @@
+local slotlist=require "LuaFile.SlotList"
+local loadAB=require "LuaFile.LoadABFromFile"
+
+local seq=0 --记录装备数量
+local Item=loadAB:Load("AssetBundles/item.ab","Item")
+
+local grid={}
+    function grid:CreateItem(parent,id,SpriteArr)
+        local o = {}
+        self.__index=self --配置元方法,使得子类可以访问父类的属性,函数
+        setmetatable(o,self)
+        o.parent=parent:GetChild(seq)
+        o.id=id
+        o.num=1
+        --o.item=Resources.Load("Prefabs/Item")
+        o.item=Item
+        o.itemGO=GameObject.Instantiate(o.item,o.parent)
+        o.itemGO.name="Item"
+        o.image=o.itemGO:GetComponent(UI.Image)
+        o.Text=o.itemGO.transform:GetChild(0):GetComponent(UI.Text)
+        o.image.sprite=SpriteArr[o.id]
+        o.Text.text=tostring(o.num)
+
+        seq=seq+1
+        return o
+
+    end
+    --获得同类型的道具时只增加数量
+    function grid:RefreshItem(id)
+        local num = slotlist:GetSlot(id).num+1
+        slotlist:GetSlot(id).num= num
+        slotlist:GetSlot(id).Text.text=tostring(num)
+
+    end
+
+return grid;

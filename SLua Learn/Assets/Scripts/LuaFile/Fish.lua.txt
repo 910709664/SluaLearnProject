@@ -1,0 +1,12 @@
+
+function main()
+    local tab={}
+
+    function tab:start()
+
+    end
+    function tab:update()
+
+    end
+    return tab
+end

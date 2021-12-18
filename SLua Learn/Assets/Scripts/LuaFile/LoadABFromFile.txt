@@ -1,0 +1,10 @@
+local loadAB={}
+    --获取Load脚本组件
+    local l=GameObject.Find("LoadAB"):GetComponent("ABLoadFromFile")
+    function loadAB:Load(filepath,filename)
+        return l.LoadAB(filepath,filename)
+    end
+    function loadAB:LoadAll(filepath)
+        return l.LoadABAll(filepath)
+    end
+return loadAB

@@ -1,0 +1,141 @@
+-- 游戏主逻辑
+local Grid = require "Grid"
+
+local GameManager={}
+    local Chess={}
+    local ChessPrefab={}
+    local MarkChess={}
+    local MoveSpeed=0.1
+    local MoveMarkChess={}
+    local MoveNoMarkChess={}
+    local SwitchTime=0.5
+    local IsSelected = false
+    local firstFish
+    local secondFish
+
+    function GameManager:InitGrid()
+        Grid:InitGrid()
+    end
+    Chess=Grid:GetCubes()   --获取初始化完的Cube数组
+    ChessPrefab=Grid:GetFish()  --获取棋子的预制体
+    --初始化标记数组
+    function GameManager:InitMarkChess()
+        for i=1,9 do
+            MarkChess[i]={}
+        end
+    end
+    --初始化时检查
+    function GameManager:CheckAll()
+        GameManager:InitMarkChess()
+        --横向检查
+        for i=1,7 do
+            for j=1,9 do
+                if(Chess[i][j].name==Chess[i+1][j].name and Chess[i][j].name==Chess[i+2][j]) then
+                    --对于需要进行三消的棋子进行标记
+                    GameManager:MarkChess(i,j)
+                    GameManager:MarkChess(i+1,j)
+                    GameManager:MarkChess(i+2,j)
+                end
+            end
+        end
+        --竖向检查
+        for i=1,9 do
+            for j=1,7 do
+                if(Chess[i][j].name==Chess[i][j+1].name and Chess[i][j].name==Chess[i][j+2]) then
+                    GameManager:MarkChess(i,j)
+                    GameManager:MarkChess(i,j+1)
+                    GameManager:MarkChess(i,j+2)
+                end
+            end
+        end
+    end
+    --标记棋子
+    function GameManager:MarkChess(x,y)
+        local markChessLength=#MarkChess[x]+1
+        --横向和竖向检查时可能已被标记,需去重
+        for index=1,markChessLength do
+            if(MarkChess[x][index]==Chess[x][y]) then
+                return
+            end
+        end
+        --标记
+        if(MarkChess[x][markChessLength]==nil) then
+            MarkChess[x][markChessLength]=Chess[x][y]
+
+        end
+    end
+    --刷新棋子
+    function GameManager:Refresh()
+
+    end
+    function GameManager:CheckAndRefresh()
+        GameManager:CheckAll()
+        GameManager:Refresh()
+    end
+    function GameManager:UpdateChess()
+        --GameManager:CheckAndRefresh()
+        if(UnityEngine.Input.GetMouseButtonDown(0))then
+            GameManager:RayCastChess()
+        end
+    end
+    function GameManager:RayCastChess()
+        local ray =UnityEngine.Camera.main:ScreenPointToRay(UnityEngine.Input.mousePosition)
+        if(UnityEngine.Physics.Raycast(ray) == false) then
+            print("RayCastFalse")
+            return;
+        end
+        local hit=UnityEngine.Physics.RaycastAll(ray)[1];
+        if(IsSelected~=false) then
+            secondFish=HitToChess(hit)
+            print("Second: "..secondFish.name)
+            GameManager:SpwanFish(firstFish,secondFish)
+            IsSelected=false;
+        else
+            firstFish=HitToChess(hit)
+            print("First: "..firstFish.name)
+            IsSelected=true
+        end
+        end
+    --判断两个棋子是否可以交换
+    function GameManager:IsAdjust(fish1,fish2)
+        local x1,y1=GetFishPos(fish1)
+        local x2,y2=GetFishPos(fish2)
+        return (x1==x2 and math.abs(y1-y2)==1)or(y1==y2 and math.abs(x1-x2)==1)
+    end
+    function GameManager:SpwanFish(fish1,fish2)
+        if(GameManager:IsAdjust(fish1,fish2)) then
+            local x1,y1=GetFishPos(fish1)
+            local x2,y2=GetFishPos(fish2)
+            local Parent1=fish1.transform.parent
+            local Parent2=fish2.transform.parent
+
+            GameManager:MoveTo(fish1,x2,y2)
+            fish1.transform:SetParent(Parent2)
+            GameManager:MoveTo(fish2,x1,y1)
+            fish2.transform:SetParent(Parent1)
+            --交换后修改二维数组
+            local newX1,newY1=GetLocalPos(x1,y1)
+            local newX2,newY2=GetLocalPos(x2,y2)
+            Chess[newX1][newY1]=fish2
+            Chess[newX2][newY2]=fish1
+            print("SwapFish")
+        end
+    end
+    function GameManager:MoveTo(fish,newX,newY)
+        fish.transform.position=Vector3(newX,newY,0)
+    end
+    --根据射线坐标映射到二维数组里,便于获取游戏物体
+    function HitToChess(hit)
+        local x=hit.transform.position.x+5.5
+        local y=5.5-hit.transform.position.y
+        return Chess[x][y]
+    end
+    --将世界坐标映射到数组下标
+    function GetLocalPos(x,y)
+        return x+5.5,5.5-y;
+    end
+    --返回鱼的世界坐标
+    function GetFishPos(fish)
+        return fish.transform.position.x,fish.transform.position.y;
+    end
+return GameManager

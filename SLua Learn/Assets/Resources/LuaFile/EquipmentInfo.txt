@@ -1,0 +1,25 @@
+
+equipmentInfo={
+    {
+        equipmentID =1,
+        name = "Gear1",
+    },
+    {
+        equipmentID=2,
+        name="Gear2",
+    },
+    {
+        equipmentID=3,
+        name="Gear3",
+    },
+    {
+        equipmentID=4,
+        name="Gear4",
+    },
+    {
+        equipmentID=5,
+        name="Gear5",
+    },
+}
+
+return equipmentInfo

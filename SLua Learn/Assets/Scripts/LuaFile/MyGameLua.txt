@@ -1,0 +1,15 @@
+import "UnityEngine"
+
+local GameManger= require "GameManager"
+
+function main()
+    local tab={}
+    function tab:Start()
+        print("RunSuccess")
+        GameManger:InitGrid()
+    end
+    function tab:Update()
+        GameManger:UpdateChess()
+    end
+    return tab
+end
