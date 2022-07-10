@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 648737e9991136443a18c6333a94319b, type: 3}
+  m_Name: FormatInventory
+  m_EditorClassIdentifier: 
+  RoleList: []
+  FormatList:
+  - {fileID: 11400000, guid: a45c152e233e36e4dac294df0f8c875c, type: 2}
+  - {fileID: 11400000, guid: 1f486f888bcdee84481b3e9f712bc8aa, type: 2}

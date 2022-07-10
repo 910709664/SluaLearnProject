@@ -1,0 +1,13 @@
+<Root>
+  <Role name="416">
+    <contents>
+      <content>这是新手教程</content>
+      <content>点击人物可以移动和攻击</content>
+    </contents>
+  </Role>
+  <Role name="45">
+    <contents>
+      <content>点击回合结束进入下回合</content>
+    </contents>
+  </Role>
+</Root>

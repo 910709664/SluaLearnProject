@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Root>
+    <dialogs>
+      <dialog>这里是新手教程</dialog>
+      <dialog>点击人物可以显示移动和攻击范围</dialog>
+      <dialog>点击攻击范围内的敌人即可攻击</dialog>
+      <dialog>人物每次只能攻击一次,点击结束回合进入下回合</dialog>
+    </dialogs>
+</Root>
